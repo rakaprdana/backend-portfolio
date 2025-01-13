@@ -1,16 +1,21 @@
-import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import Express from "express";
-import configDB from "./src/config/db";
+import express from "express";
 import cors from "cors";
-import corsOptions from "./src/config/corsConfig";
+import bodyParser from "body-parser";
+import { connectDB } from "./src/config/db";
+import authRoutes from "./src/routes/authRoute";
+import contactRoutes from "./src/routes/contactRoute";
+
 dotenv.config();
-
-const app = Express();
+const app = express();
 const PORT = process.env.PORT || 5000;
-const JWT_SECRET = process.env.JWT_SECRET;
 
+app.use(cors());
 app.use(bodyParser.json());
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
-configDB.connectDB();
+
+connectDB();
+
+app.use("/api/auth", authRoutes);
+app.use("/api", contactRoutes);
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT} `));

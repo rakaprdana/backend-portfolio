@@ -1,17 +1,14 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-class DatabaseConfig {
-  connectDB = async (): Promise<void> => {
-    try {
-      if (!process.env.MONGO_URI) {
-        throw new Error("MONGO_URL is undefined. Please check your .env file");
-      }
-      await mongoose.connect(process.env.MONGO_URI, {});
-      console.log("MongoDB has been connected");
-    } catch (error: any) {
-      console.error("Connection error:", error.message);
-    }
-  };
-}
+dotenv.config();
 
-export default new DatabaseConfig();
+export const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI || "", {});
+    console.log("MongoDB connected");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1);
+  }
+};
