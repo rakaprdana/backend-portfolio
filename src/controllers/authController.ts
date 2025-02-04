@@ -27,7 +27,7 @@ export const register = async (
 export const login = async (
   req: Request<{}, {}, LoginRequestBody>,
   res: Response
-): Promise<Response> => {
+): Promise<any> => {
   const { username, password } = req.body;
 
   if (!username || !password) {
